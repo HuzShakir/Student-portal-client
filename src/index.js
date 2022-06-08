@@ -3,8 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './utils/config'
+import awsauth from './utils/awsauth'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+Amplify.configure(awsconfig)  
+Auth.configure({oauth:awsauth})
+
 root.render(
   <React.StrictMode>
     <App />
