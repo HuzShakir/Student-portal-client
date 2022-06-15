@@ -98,7 +98,7 @@ export default function Navbar({user}) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="!#"
+                            href="#"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')+"cursor-pointer"}
                           >
                             Your Profile
@@ -108,7 +108,7 @@ export default function Navbar({user}) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="!#"
+                            href="#"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')+"cursor-pointer"}
                           >
                             Settings
@@ -118,7 +118,6 @@ export default function Navbar({user}) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="!#"
                             onClick={() =>  Auth.signOut()}
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')+"cursor-pointer"}
                           >

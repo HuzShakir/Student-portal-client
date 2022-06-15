@@ -97,7 +97,7 @@ export default function DescriptionList({ data, id, change,view }) {
       </div>
       <div className="border-t border-gray-200">
         <dl>
-          {data.length>0 && JSON.parse(selected.value).map((x, i) => {
+          {data.length>0 && selected?.value?.map((x, i) => {
             if (i % 2 === 0) {
               return (
                 <div key={v4()} className="bg-slate-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

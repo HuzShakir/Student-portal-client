@@ -7,13 +7,11 @@ const config= {
     "userPoolWebClientId": `${process.env.REACT_APP_CLIENT_ID}`,
     "mandatorySignIn": false,
     "cookieStorage": {
-      "domain": "localhost",
+      "domain": `${process.env.NODE_ENV==='development'?"localhost":"react-student-portal.s3-website.ap-south-1.amazonaws.com"}`,
       "path": "/",
       "expires": 365,
-      "secure": false
+      "secure": true
     },
-    "redirectSignIn": "http://localhost:3000/",
-    "redirectSignOut": "http://localhost:3000"
 },
 "API": {
     "endpoints": [

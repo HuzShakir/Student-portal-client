@@ -1,5 +1,5 @@
 import  { Auth, Hub  } from 'aws-amplify'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import { useEffect, useState } from 'react';
 import Student from './Student';
@@ -9,6 +9,7 @@ import '@aws-amplify/ui-react/styles.css';
 
 function App() {
   const [user, setuser] = useState(false)
+  const [loading, setloading] = useState(true)
   useEffect(() => {
     Hub.listen('auth', ({ payload: { event, data } }) => {
           switch (event) {
@@ -26,28 +27,30 @@ function App() {
       }, [])
 
       useEffect(()=>{
-        Auth.currentSession().then(data=>setuser(data)).catch(err=>setuser(false))
+        Auth.currentSession().then(data=>{setuser(data);setloading(false)}).catch(err=>{setuser(false);setloading(false)})
       },[])
   
 
 
   return (
-    <div className="">
-      <Router>
-      <Navbar user={user} />
-        <Routes>
-          {!user ? 
-        (  <Route exact path='/' element={<Authenticator className='mt-5 rounded-md' hideSignUp />}></Route>)
-          :(<Route exact path='/' element={<Dashboard/>}></Route>)
-        }
-          {user && <>
-          {/* <Route exact path='/dashboard' element={<Home payload={user.accessToken.payload}   />}></Route> */}
-          <Route exact path="/student/:studentid" element={<Student view={!user?.accessToken.payload['cognito:groups'].includes("Student")}  />}></Route>
-          </>}
-          
-        </Routes>
-      </Router>
-    </div>
+    <>
+      {!loading && <div className="">
+        <Router>
+        <Navbar user={user} />
+          <Routes>
+            {!user ? 
+          (  <Route exact path='/' element={<Authenticator className='mt-5 rounded-md' hideSignUp />}></Route>)
+            :(<Route exact path='/' element={user?.accessToken.payload['cognito:groups'].includes("Student")?<Navigate to={`/student/${user.accessToken.payload.sub}`}/>:<Dashboard/>}></Route>)
+          }
+            {user && <>
+            <Route exact path="/student/:studentid" element={<Student view={!user?.accessToken.payload['cognito:groups'].includes("Student")}  />}></Route>
+            </>}
+            <Route path='*' element={<Navigate to={'/'}/>}/>
+            
+          </Routes>
+        </Router>
+      </div>}
+    </>
   );
 }
 

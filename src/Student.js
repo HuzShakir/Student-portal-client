@@ -1,6 +1,6 @@
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {PencilAltIcon} from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react";
 import DescriptionList from "./DescriptionList";
@@ -17,6 +17,7 @@ function Student({view}) {
 
   const [open, setOpen] = useState(false)
   const cancelButtonRef = useRef(null)
+  const navigate = useNavigate();
 
   const onSubmitHandler=(e)=>{
     e.preventDefault()
@@ -25,7 +26,7 @@ function Student({view}) {
       username: username,
       Department:Department,
       ClassNo:ClassNo
-    }}).then(data=>console.log(data)).catch(err=>console.log(err))
+    }}).then(data=>{console.log(data);setrefresh(!refresh)}).catch(err=>console.log(err))
   }
     
   useEffect(() => {
@@ -33,12 +34,13 @@ function Student({view}) {
       .then((data) => {
         setdata(data);
         setuser(data.filter(x=>x.sk==='User Attributes')[0])
+        var user=data.filter(x=>x.sk==='User Attributes')[0]
         setusername(user.username)
         setClassNo(user.ClassNo)
         setDepartment(user.Department)
         setemail(user.email)
       }) 
-      .catch((err) => console.log(err));
+      .catch((err) => {navigate('/')});
   //  eslint-disable-next-line 
   }, [refresh]);
 
@@ -46,7 +48,6 @@ function Student({view}) {
     console.log(refresh)
     setrefresh(!refresh)
   }
-
   return (
     <div>
       <div className='md:grid md:grid-cols-5 py-10 md:mr-5'>
@@ -107,7 +108,7 @@ function Student({view}) {
                 <Dialog.Panel className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <button onClick={()=>setOpen(false)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="authentication-modal">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>  
             </button>
             <div className="py-6 px-6 lg:px-8">
                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Update Student Attributes</h3>
@@ -139,7 +140,7 @@ function Student({view}) {
                         <label htmlFor="ClassNo" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ClassNo</label>
                         <input value={ClassNo} onChange={(e)=>setClassNo(e.target.value)} type="text" name="ClassNo" id="ClassNo" placeholder="" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"  required/>
                     </div>
-                    <button type="submit" onClick={()=>setrefresh(!refresh)} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save Changes</button>
+                    <button type="submit" onClick={()=>setOpen(false)} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save Changes</button>
                     
                 </form>
             </div>
