@@ -7,7 +7,7 @@ const config= {
     "userPoolWebClientId": `${process.env.REACT_APP_CLIENT_ID}`,
     "mandatorySignIn": false,
     "cookieStorage": {
-      "domain": `${process.env.NODE_ENV==='development'?"localhost":"react-student-portal.s3-website.ap-south-1.amazonaws.com"}`,
+      "domain": `${process.env.NODE_ENV==='development'?"localhost":`${process.env.REACT_APP_URL}`}`,
       "path": "/",
       "expires": 365,
       "secure": true
